@@ -120,3 +120,55 @@ class NiceStringFinder(object):
 
     def isNicePart2(self,string):
         return self.containsADoublePair(string) and self.contains_sandwich(string)
+
+import numpy as np
+class lightSwitcher(object):
+    def __init__(self):
+        self.lights=np.zeros((1000,1000))
+
+    def turnOn(self, start, end):
+        self.setLightsToValue(start, end, 1)
+
+    def turnOff(self, start, end):
+        self.setLightsToValue(start, end, 0)
+
+    def setLightsToValue(self, start, end, value):
+        x,y=zip(start,end)
+        self.lights[x[0]:x[1]+1,y[0]:y[1]+1] = value
+
+    def toggle(self,start,end):
+        x,y=zip(start,end)
+        self.lights[x[0]:x[1]+1,y[0]:y[1]+1] = np.logical_not(self.lights[x[0]:x[1]+1,y[0]:y[1]+1])
+
+    def parseLine(self,line):
+        commands={"turn on":self.turnOn,"turn off":self.turnOff,"toggle":self.toggle}
+        for command,function in commands.items():
+            if command in line:
+                break
+
+        start,end = line.strip(command+"\n").split("through")
+        startx,starty = [int(value) for value in start.split(",")]
+        endx,endy = [int(value) for value in end.split(",")]
+        function((startx,starty),(endx,endy))
+
+    def sum(self):
+        return self.lights.sum()
+
+class NordicLightSwitcher(lightSwitcher):
+    def __init__(self):
+        super(NordicLightSwitcher,self).__init__()
+
+    def turnOff(self, start, end):
+        self.setLightsToValue(start, end, -1)
+
+    def setLightsToValue(self, start, end, value):
+        x,y=zip(start,end)
+        if value>0:
+            self.lights[x[0]:x[1]+1,y[0]:y[1]+1] += value
+        else:
+            slice=self.lights[x[0]:x[1]+1,y[0]:y[1]+1]
+            self.lights[x[0]:x[1]+1,y[0]:y[1]+1]-=slice>0
+
+    def toggle(self,start,end):
+        self.setLightsToValue(start,end,2)
+
