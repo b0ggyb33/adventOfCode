@@ -173,13 +173,62 @@ class NordicLightSwitcher(lightSwitcher):
         self.setLightsToValue(start,end,2)
 
 class Wire(object):
-    def __init__(self,value=0):
+    def __init__(self,value=0,name="Wire"):
         self.value=value
+        self.name=name
+
+    def __str__(self):
+        return self.name
 
     def __repr__(self):
         return repr(self.value)
 
     def __cmp__(self, other):
         return cmp(self.value,other)
+
+    def __and__(self,other):
+        return self.value & other
+
+    def __rand__(self, other):
+        return self.value & other
+
+    def __or__(self, other):
+        return self.value | other
+
+    def __ror__(self, other):
+        return self.value | other
+
+    def __invert__(self):
+        return 2**16 - self.value
+
+    def __lshift__(self, other):
+        return self.value << other
+
+    def __rshift__(self, other):
+        return self.value >> other
+
+import operator as o
+
+def wireParse(line,wireList):
+    operators={"AND":o.and_,"OR":o.or_,"NOT":o.inv,"LSHIFT":o.lshift,"RSHIFT":o.rshift}
+
+    stroperator,name = line.split("->")
+
+
+    if all([op not in stroperator for op in operators]):
+        #must just be an assignment
+        newWire = Wire(int(stroperator),name.strip(" "))
+        return newWire
+
+    for operator,function in operators.items():
+        if operator in stroperator:
+            wirea,wireb=stroperator.split(operator)
+            print wirea,wireb,function
+
+
+
+
+
+
 
 
