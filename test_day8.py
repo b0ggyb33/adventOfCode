@@ -49,4 +49,5 @@ class test_day8(unittest.TestCase):
             chars,data = countLineCharacters(line.strip("\"\n\"" ))
             charCount+=chars
             dataCount+=data
-        self.assertGreater(1329,charCount-dataCount)
+        print charCount-dataCount
+        self.assertGreater(charCount-dataCount,1329)
