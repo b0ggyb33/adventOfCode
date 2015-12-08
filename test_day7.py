@@ -39,5 +39,53 @@ class test_day7(unittest.TestCase):
     def test_AND_instruction(self):
         x = Wire(2,"x")
         y = Wire(3,"y")
-        wires=[x,y]
-        self.assertEqual(2, wireParse("x AND y -> z",wires))
+        wires={"x":x,"y":y}
+        z = wireParse("x AND y -> z",wires)
+        self.assertEqual(2,z)
+        self.assertEqual("z",str(z))
+
+    def test_NOT_instruction(self):
+        e = Wire(3,"e")
+        wires={"e":e}
+        f=wireParse("NOT e -> f",wires)
+        self.assertEqual(65533, f)
+        self.assertEqual("f",str(f))
+
+    def test_RSHIFT(self):
+        y = Wire(8,"y")
+        wires={"y":y}
+        g=wireParse("y RSHIFT 2 -> g",wires)
+        self.assertEqual(2,g)
+        self.assertEqual("g",str(g))
+
+    def test_LSHIFT(self):
+        y = Wire(2,"y")
+        wires={"y":y}
+        g=wireParse("y LSHIFT 2 -> g",wires)
+        self.assertEqual(8,g)
+        self.assertEqual("g",str(g))
+
+    def test_sample(self):
+        samples=["123 -> x\n",
+                 "456 -> y\n",
+                 "x AND y -> d\n",
+                 "x OR y -> e\n",
+                 "x LSHIFT 2 -> f\n",
+                 "y RSHIFT 2 -> g\n",
+                 "NOT x -> h\n",
+                 "NOT y -> i"]
+
+        wireList={}
+        for sample in samples:
+            newWire=wireParse(sample.strip("\n"),wireList)
+            if newWire not in wireList:
+                wireList[newWire.name]=newWire
+
+        self.assertEqual(72,wireList["d"])
+        self.assertEqual(507,wireList["e"])
+        self.assertEqual(492,wireList["f"])
+        self.assertEqual(114,wireList["g"])
+        self.assertEqual(65412,wireList["h"])
+        self.assertEqual(65079,wireList["i"])
+        self.assertEqual(123,wireList["x"])
+        self.assertEqual(456,wireList["y"])

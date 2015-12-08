@@ -184,7 +184,10 @@ class Wire(object):
         return repr(self.value)
 
     def __cmp__(self, other):
-        return cmp(self.value,other)
+        if type(other)==str:
+            return cmp(self.name,other)
+        else:
+            return cmp(self.value,other)
 
     def __and__(self,other):
         return self.value & other
@@ -213,17 +216,34 @@ def wireParse(line,wireList):
     operators={"AND":o.and_,"OR":o.or_,"NOT":o.inv,"LSHIFT":o.lshift,"RSHIFT":o.rshift}
 
     stroperator,name = line.split("->")
-
+    name=name.strip(" ")
 
     if all([op not in stroperator for op in operators]):
         #must just be an assignment
-        newWire = Wire(int(stroperator),name.strip(" "))
+        newWire = Wire(int(stroperator),name)
         return newWire
 
     for operator,function in operators.items():
         if operator in stroperator:
             wirea,wireb=stroperator.split(operator)
-            print wirea,wireb,function
+            wirea = wirea.strip(" ")
+            wireb = wireb.strip(" ")
+
+            for wire in wireList.values():
+                if wirea==wire:
+                    wirea=wire
+                if wireb==wire:
+                    wireb=wire
+
+            if function==o.inv:
+                returnWire = Wire(function(wireb),name)
+            elif function==o.lshift or function==o.rshift:
+                returnWire = Wire(function(wirea,int(wireb)),name)
+            else:
+                returnWire = Wire(function(wirea,wireb),name)
+
+            return returnWire
+
 
 
 
