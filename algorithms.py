@@ -202,7 +202,7 @@ class Wire(object):
         return self.value | other
 
     def __invert__(self):
-        return 2**16 - self.value
+        return 2**16 - self.value - 1
 
     def __lshift__(self, other):
         return self.value << other
