@@ -17,7 +17,7 @@ class test_day8(unittest.TestCase):
     def test_hex27_returns6_1(self):
         self.assertEqual((6,1),countLineCharacters(r"\x27"))
 
-    def test_doubleescape(self):
+    def test_double_escape(self):
         self.assertEqual((10,7),countLineCharacters(r"aaa\\aaa"))
 
     def test_difficultCase(self):
