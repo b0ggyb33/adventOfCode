@@ -178,8 +178,9 @@ def countLineCharacters(line):
     line=line.replace(r"\"","a")
     line = line.replace(r"\\","a")
     escapedHex = len(line.split(r"\x"))-1
-    escapedHex *= 3
-    return (total,len(line)-escapedHex) #only 3 because one still remains (4-1)def processStringLiterals(lines):
+    escapedHex *= 3 #only 3 because one still remains (4-1)
+    return (total,len(line)-escapedHex)
+
 def processStringLiterals(lines):
     charCount=0
     dataCount=0
