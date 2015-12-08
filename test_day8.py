@@ -1,6 +1,9 @@
 import unittest
-from algorithms import countLineCharacters
+from algorithms import countLineCharacters, processStringLiterals
 class test_day8(unittest.TestCase):
+
+    def setUp(self):
+        self.testData = [line for line in open("testData/stringLiterals")]
 
     def test_twoquotesreturnszero(self):
         self.assertEqual((2,0),countLineCharacters(r""))
@@ -20,34 +23,15 @@ class test_day8(unittest.TestCase):
     def test_difficultCase(self):
         self.assertEqual((33,27),countLineCharacters(r"rq\\\"mohnjdf\\xv\\hrnosdtmvxot"))
 
-    def test_sample(self):
-        lines=[line for line in open("testData/stringLiterals")]
-        for line in lines[:1]:
-            self.assertEqual((24,22),countLineCharacters(line.strip("\"\n")))
-        charCount=0
-        dataCount=0
-        for line in lines[:2]:
-            chars,data = countLineCharacters(line.strip("\"\n"))
-            charCount+=chars
-            dataCount+=data
-        self.assertEqual((24+28,22+18),(charCount,dataCount))
-
     def test_example(self):
-        charCount,dataCount=0,0
         lines=[r"",r"abc",r"aaa\"aaa",r"\x27"]
-        for line in lines:
-            chars,data = countLineCharacters(line)
-            charCount+=chars
-            dataCount+=data
-        self.assertEqual(12,charCount-dataCount)
+        self.assertEqual(12,processStringLiterals(lines))
+
+    def test_sample1(self):
+        self.assertEqual(2,processStringLiterals(self.testData[:1]))
+
+    def test_sample_first2(self):
+        self.assertEqual((24+28)-(22+18),processStringLiterals(self.testData[:2]))
 
     def test_fullSample(self):
-        lines=[line for line in open("testData/stringLiterals")]
-        charCount=0
-        dataCount=0
-        for line in lines:
-            chars,data = countLineCharacters(line.strip("\"\n\"" ))
-            charCount+=chars
-            dataCount+=data
-        print charCount-dataCount
-        self.assertGreater(charCount-dataCount,1329)
+        self.assertGreater(processStringLiterals(self.testData),1329)
