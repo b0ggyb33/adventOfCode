@@ -21,7 +21,7 @@ class test_day7(unittest.TestCase):
 
     def test_NOT(self):
         a=Wire(5)
-        self.assertEqual(65531, ~a)
+        self.assertEqual(65530, ~a)
 
     def test_Lshift(self):
         a=Wire(1)
@@ -48,7 +48,7 @@ class test_day7(unittest.TestCase):
         e = Wire(3,"e")
         wires={"e":e}
         f=wireParse("NOT e -> f",wires)
-        self.assertEqual(65533, f)
+        self.assertEqual(65532, f)
         self.assertEqual("f",str(f))
 
     def test_RSHIFT(self):
@@ -64,6 +64,12 @@ class test_day7(unittest.TestCase):
         g=wireParse("y LSHIFT 2 -> g",wires)
         self.assertEqual(8,g)
         self.assertEqual("g",str(g))
+
+    def test_Assignment(self):
+        lx = Wire(10,"lx")
+        newWire=wireParse("lx -> a",{"lx":lx})
+        self.assertEqual(str(newWire),"a")
+        self.assertEqual(newWire,10)
 
     def test_sample(self):
         samples=["123 -> x\n",
