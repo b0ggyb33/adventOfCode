@@ -172,3 +172,11 @@ class NordicLightSwitcher(lightSwitcher):
     def toggle(self,start,end):
         self.setLightsToValue(start,end,2)
 
+
+def countLineCharacters(line):
+    total = len(line)+2
+    line=line.replace(r"\"","a")
+    line = line.replace(r"\\","a")
+    escapedHex = len(line.split(r"\x"))-1
+    escapedHex *= 3
+    return (total,len(line)-escapedHex) #only 3 because one still remains (4-1)
