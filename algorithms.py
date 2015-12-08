@@ -174,11 +174,11 @@ class NordicLightSwitcher(lightSwitcher):
 
 
 def countLineCharacters(line):
-    total = len(line)+2
-    line=line.replace(r"\"","a")
-    line = line.replace(r"\\","a")
-    escapedHex = len(line.split(r"\x"))-1
-    escapedHex *= 3 #only 3 because one still remains (4-1)
+    total = len(line)+2 # not passing in surrounding quotes, but need to take account for them in the count
+    line=line.replace(r"\"","a") # replace all escaped quotes with a benign letter
+    line = line.replace(r"\\","a") # replace all escaped backslash with a benign letter
+    escapedHex = len(line.split(r"\x"))-1 # crude way of counting number of \x in line
+    escapedHex *= 3 # only 3 because one still remains (4-1) to remove
     return (total,len(line)-escapedHex)
 
 def processStringLiterals(lines):

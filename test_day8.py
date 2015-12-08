@@ -8,6 +8,9 @@ class test_day8(unittest.TestCase):
     def test_twoquotesreturnszero(self):
         self.assertEqual((2,0),countLineCharacters(r""))
 
+    def test_twoquotesreturnszerowhenwrittenasintest(self):
+        self.assertEqual(2,processStringLiterals(["\"\"\n"]))
+
     def test_abcReturns5_3(self):
         self.assertEqual((5,3),countLineCharacters(r"abc"))
 
@@ -32,6 +35,9 @@ class test_day8(unittest.TestCase):
 
     def test_sample_first2(self):
         self.assertEqual((24+28)-(22+18),processStringLiterals(self.testData[:2]))
+
+    def test_sample4(self):
+        self.assertEqual(23-18,processStringLiterals(self.testData[4:5]))
 
     def test_fullSample(self):
         self.assertGreater(processStringLiterals(self.testData),1329)
