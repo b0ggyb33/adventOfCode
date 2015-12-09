@@ -39,5 +39,11 @@ class test_day8(unittest.TestCase):
     def test_sample4(self):
         self.assertEqual(23-18,processStringLiterals(self.testData[4:5]))
 
+    def test_sample_line59(self):
+        self.assertEqual(2,processStringLiterals(self.testData[58:59]))
+
+    def test_sample_line87(self):
+        self.assertEqual(14-8,processStringLiterals(self.testData[86:87]))
+
     def test_fullSample(self):
-        self.assertGreater(processStringLiterals(self.testData),1329)
+        self.assertEqual(processStringLiterals(self.testData),1342)
