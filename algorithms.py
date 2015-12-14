@@ -185,7 +185,19 @@ def processStringLiterals(lines):
     charCount=0
     dataCount=0
     for line in lines:
-        chars,data = countLineCharacters(line.strip("\"\n\" "))
+        chars,data = countLineCharacters(line.strip("\"\n\r"))
         charCount+=chars
         dataCount+=data
     return charCount-dataCount
+
+class Reindeer(object):
+    def __init__(self,speed,rest_time,rest_length):
+        self.speed=speed
+        self.rest_time=rest_time
+        self.rest_length=rest_length
+        self.distance=0
+
+    def fly(self,duration):
+        duration-=self.rest_length*(duration / self.rest_time)
+        self.distance = self.speed*duration
+
