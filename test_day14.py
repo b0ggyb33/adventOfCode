@@ -28,6 +28,12 @@ class test_day14(unittest.TestCase):
     def test_ReindeerFlys_100m_in_10s(self):
         self.assertEqual(100,self.moveReindeer(self.reindeer,10))
 
+    def test_ReindeerFlies_100m_in_10s_inTen_Calls(self):
+        for i in range(10):
+            self.moveReindeer(self.reindeer,1)
+
+        self.assertEqual(100,self.reindeer.distance)
+
     def test_reindeerHasARestAfter20sFor1s(self):
         self.assertEqual(200,self.moveReindeer(self.reindeer,21))
 
@@ -64,5 +70,19 @@ class test_day14(unittest.TestCase):
 
     def test_part1(self):
         [rein.fly(2503) for rein in self.reindeerList]
-        print max([reindo.distance for reindo in self.reindeerList])
+        self.assertEqual(2696, max([reindo.distance for reindo in self.reindeerList]))
 
+    def test_oneSecondGiveOutStar(self):
+        [reindeer.fly(1) for reindeer in self.reindeerList]
+        self.assertEqual((25,"Donner"), max([(reindo.distance,reindo.name) for reindo in self.reindeerList]))
+        _,fastestReindeer = max([(reindeer.distance,reindeer) for reindeer in self.reindeerList])
+        fastestReindeer.awardStar()
+        self.assertEqual((1,"Donner"), max([(reindo.stars,reindo.name) for reindo in self.reindeerList]))
+
+    def testFakeReindeer(self):
+        reindeerList=[Reindeer("bob",10,1,1),Reindeer("fred",8,10,1)]
+        for idx in range(3):
+            [reindeer.fly(1) for reindeer in reindeerList]
+            _,fastestReindeer = max([(reindeer.distance,reindeer) for reindeer in reindeerList])
+            fastestReindeer.awardStar()
+        self.assertEqual((2,"bob"), max([(reindo.stars,reindo.name) for reindo in reindeerList]))
