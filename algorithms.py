@@ -191,13 +191,22 @@ def processStringLiterals(lines):
     return charCount-dataCount
 
 class Reindeer(object):
-    def __init__(self,speed,rest_time,rest_length):
+    def __init__(self,name,speed,rest_time,rest_length):
+        self.name=name
         self.speed=speed
         self.rest_time=rest_time
         self.rest_length=rest_length
         self.distance=0
 
     def fly(self,duration):
-        duration-=self.rest_length*(duration / self.rest_time)
-        self.distance = self.speed*duration
+        while duration>0:
+            if duration>self.rest_time:
+                duration-=self.rest_time
+                self.distance += self.speed*self.rest_time
+                duration-=self.rest_length
+            else:
+                self.distance+=self.speed*duration
+                duration=0
 
+    def __repr__(self):
+        return self.name
