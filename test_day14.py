@@ -5,7 +5,8 @@ class test_day14(unittest.TestCase):
     def setUp(self):
         self.reindeer = Reindeer(name="bob",speed=10,rest_time=20,rest_length=1)
         self.reindeerList = self.loadTestData()
-
+        self.comet = Reindeer("comet",14,10,127)
+        self.dancer = Reindeer("dancer",16,11,162)
     def loadTestData(self):
         lines=[line for line in open("testData/reindeerRacing")]
         reindeer=[]
@@ -49,22 +50,17 @@ class test_day14(unittest.TestCase):
         self.assertEqual(200,rudolph.distance)
 
     def testCometexample(self):
-        comet = Reindeer("comet",14,10,127)
-        self.moveReindeer(comet,1000)
-        self.assertEqual(1120,comet.distance)
+        self.moveReindeer(self.comet,1000)
+        self.assertEqual(1120,self.comet.distance)
 
     def testDancerexample(self):
-        dancer = Reindeer("dancer",16,11,162)
-        self.moveReindeer(dancer,1000)
-        self.assertEqual(1056,dancer.distance)
+        self.moveReindeer(self.dancer,1000)
+        self.assertEqual(1056,self.dancer.distance)
 
     def test_cometFurtherThanDancer(self):
-        comet = Reindeer("comet",14,10,127)
-        dancer = Reindeer("dancer",16,11,162)
-        self.moveReindeer(comet,1000)
-        self.moveReindeer(dancer,1000)
-
-        self.assertEqual(True,comet.distance>dancer.distance)
+        self.moveReindeer(self.comet,1000)
+        self.moveReindeer(self.dancer,1000)
+        self.assertEqual(True,self.comet.distance>self.dancer.distance)
 
     def test_part1(self):
         [rein.fly(2503) for rein in self.reindeerList]
