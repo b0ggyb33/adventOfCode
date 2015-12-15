@@ -94,18 +94,28 @@ class test_day14(unittest.TestCase):
         reindeerList=[self.dancer,self.comet]
         for idx in range(1000):
             [reindeer.fly(1) for reindeer in reindeerList]
-            _,fastestReindeer = max([(reindeer.distance,reindeer) for reindeer in reindeerList])
-            fastestReindeer.awardStar()
+            maxDistance=0
+            for reindeer in reindeerList:
+                if reindeer.distance>maxDistance:
+                    maxDistance=reindeer.distance
+
+            for reindeer in reindeerList:
+                if reindeer.distance==maxDistance:
+                    reindeer.awardStar()
         self.assertEqual(689,self.dancer.stars)
         self.assertEqual(312,self.comet.stars)
 
     def test_part2(self):
         for idx in range(2503):
             [reindeer.fly(1) for reindeer in self.reindeerList]
-            _,fastestReindeer = max([(reindeer.distance,reindeer) for reindeer in self.reindeerList])
-            fastestReindeer.awardStar()
+            maxDistance=0
+            for reindeer in self.reindeerList:
+                if reindeer.distance>maxDistance:
+                    maxDistance=reindeer.distance
 
-        print [(reindo.stars,reindo.name) for reindo in self.reindeerList]
+            for reindeer in self.reindeerList:
+                if reindeer.distance==maxDistance:
+                    reindeer.awardStar()
+
         maxstars,maxname = max([(reindo.stars,reindo.name) for reindo in self.reindeerList])
-        print maxstars,maxname
-        self.assertGreater(maxstars,1074)
+        self.assertEqual(maxstars,1084)
