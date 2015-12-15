@@ -36,9 +36,12 @@ class test_day14(unittest.TestCase):
 
     def test_reindeerHasARestAfter20sFor1s(self):
         self.assertEqual(200,self.moveReindeer(self.reindeer,21))
+        self.assertEqual(True,self.reindeer.resting)
 
     def test_reindeerHasARestAfter20sFor1sThenFlysAgain(self):
-        self.assertEqual(210,self.moveReindeer(self.reindeer,22))
+        for i in xrange(22):
+            self.moveReindeer(self.reindeer,1)
+        self.assertEqual(210,self.reindeer.distance)
 
     def test_reindeerHasHadTwoRestsAfter44s(self):
         self.assertEqual(420,self.moveReindeer(self.reindeer,44))
@@ -85,4 +88,4 @@ class test_day14(unittest.TestCase):
             [reindeer.fly(1) for reindeer in reindeerList]
             _,fastestReindeer = max([(reindeer.distance,reindeer) for reindeer in reindeerList])
             fastestReindeer.awardStar()
-        self.assertEqual((2,"bob"), max([(reindo.stars,reindo.name) for reindo in reindeerList]))
+        self.assertEqual((2,"fred"), max([(reindo.stars,reindo.name) for reindo in reindeerList]))

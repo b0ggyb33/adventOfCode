@@ -200,6 +200,7 @@ class Reindeer(object):
         self.counter=0
         self.stars=0
         self.resting=False
+
     def fly(self,duration):
         for dur in range(duration):
             if self.resting:
@@ -207,16 +208,15 @@ class Reindeer(object):
                     self.counter+=1
                 else:
                     self.resting=False
-                    self.counter=0
+                    self.distance+=self.speed
+                    self.counter=1
             else:
                 if self.counter<self.rest_time:
                     self.counter+=1
                     self.distance+=self.speed
                 else:
                     self.resting=True
-                    self.counter=0
-
-
+                    self.counter=1
 
     def awardStar(self):
         self.stars+=1
