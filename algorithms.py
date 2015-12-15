@@ -192,21 +192,34 @@ def processStringLiterals(lines):
 
 class Reindeer(object):
     def __init__(self,name,speed,rest_time,rest_length):
-        self.name=name
+        self.name=name.strip(" ")
         self.speed=speed
         self.rest_time=rest_time
         self.rest_length=rest_length
         self.distance=0
+        self.counter=0
+        self.stars=0
+        self.resting=False
 
     def fly(self,duration):
-        while duration>0:
-            if duration>self.rest_time:
-                duration-=self.rest_time
-                self.distance += self.speed*self.rest_time
-                duration-=self.rest_length
+        for dur in range(duration):
+            if self.resting:
+                if self.counter<self.rest_length:
+                    self.counter+=1
+                else:
+                    self.resting=False
+                    self.distance+=self.speed
+                    self.counter=1
             else:
-                self.distance+=self.speed*duration
-                duration=0
+                if self.counter<self.rest_time:
+                    self.counter+=1
+                    self.distance+=self.speed
+                else:
+                    self.resting=True
+                    self.counter=1
+
+    def awardStar(self):
+        self.stars+=1
 
     def __repr__(self):
         return self.name
