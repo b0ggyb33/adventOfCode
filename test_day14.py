@@ -18,6 +18,18 @@ class test_day14(unittest.TestCase):
             reindeer.append(Reindeer(name,int(speed),int(rest_time),int(rest_duration)))
         return reindeer
 
+    def manageRace(self,duration,reindeers):
+        for idx in range(duration):
+            [reindeer.fly(1) for reindeer in reindeers]
+            maxDistance=0
+            for reindeer in reindeers:
+                if reindeer.distance>maxDistance:
+                    maxDistance=reindeer.distance
+
+            for reindeer in reindeers:
+                if reindeer.distance==maxDistance:
+                    reindeer.awardStar()
+
     def moveReindeer(self,reindeer,time):
         reindeer.fly(time)
         return reindeer.distance
@@ -84,38 +96,16 @@ class test_day14(unittest.TestCase):
 
     def testFakeReindeer(self):
         reindeerList=[Reindeer("bob",10,1,1),Reindeer("fred",8,10,1)]
-        for idx in range(3):
-            [reindeer.fly(1) for reindeer in reindeerList]
-            _,fastestReindeer = max([(reindeer.distance,reindeer) for reindeer in reindeerList])
-            fastestReindeer.awardStar()
+        self.manageRace(3,reindeerList)
         self.assertEqual((2,"fred"), max([(reindo.stars,reindo.name) for reindo in reindeerList]))
 
     def test_comet_dancer_example_2(self):
         reindeerList=[self.dancer,self.comet]
-        for idx in range(1000):
-            [reindeer.fly(1) for reindeer in reindeerList]
-            maxDistance=0
-            for reindeer in reindeerList:
-                if reindeer.distance>maxDistance:
-                    maxDistance=reindeer.distance
-
-            for reindeer in reindeerList:
-                if reindeer.distance==maxDistance:
-                    reindeer.awardStar()
+        self.manageRace(1000,reindeerList)
         self.assertEqual(689,self.dancer.stars)
         self.assertEqual(312,self.comet.stars)
 
     def test_part2(self):
-        for idx in range(2503):
-            [reindeer.fly(1) for reindeer in self.reindeerList]
-            maxDistance=0
-            for reindeer in self.reindeerList:
-                if reindeer.distance>maxDistance:
-                    maxDistance=reindeer.distance
-
-            for reindeer in self.reindeerList:
-                if reindeer.distance==maxDistance:
-                    reindeer.awardStar()
-
+        self.manageRace(2503,self.reindeerList)
         maxstars,maxname = max([(reindo.stars,reindo.name) for reindo in self.reindeerList])
         self.assertEqual(maxstars,1084)
