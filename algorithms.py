@@ -172,3 +172,54 @@ class NordicLightSwitcher(lightSwitcher):
     def toggle(self,start,end):
         self.setLightsToValue(start,end,2)
 
+
+def countLineCharacters(line):
+    total = len(line)+2 # not passing in surrounding quotes, but need to take account for them in the count
+    line=line.replace(r"\"","a") # replace all escaped quotes with a benign letter
+    line = line.replace(r"\\","a") # replace all escaped backslash with a benign letter
+    escapedHex = len(line.split(r"\x"))-1 # crude way of counting number of \x in line
+    escapedHex *= 3 # only 3 because one still remains (4-1) to remove
+    return (total,len(line)-escapedHex)
+
+def processStringLiterals(lines):
+    charCount=0
+    dataCount=0
+    for line in lines:
+        chars,data = countLineCharacters(line.strip("\"\n\r"))
+        charCount+=chars
+        dataCount+=data
+    return charCount-dataCount
+
+class Reindeer(object):
+    def __init__(self,name,speed,rest_time,rest_length):
+        self.name=name.strip(" ")
+        self.speed=speed
+        self.rest_time=rest_time
+        self.rest_length=rest_length
+        self.distance=0
+        self.counter=0
+        self.stars=0
+        self.resting=False
+
+    def fly(self,duration):
+        for dur in range(duration):
+            if self.resting:
+                if self.counter<self.rest_length:
+                    self.counter+=1
+                else:
+                    self.resting=False
+                    self.distance+=self.speed
+                    self.counter=1
+            else:
+                if self.counter<self.rest_time:
+                    self.counter+=1
+                    self.distance+=self.speed
+                else:
+                    self.resting=True
+                    self.counter=1
+
+    def awardStar(self):
+        self.stars+=1
+
+    def __repr__(self):
+        return self.name
