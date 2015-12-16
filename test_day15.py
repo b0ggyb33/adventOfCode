@@ -57,10 +57,15 @@ class test_recipe_optimiser(unittest.TestCase):
                 ingredient_scores[score] += ingredient[score]*quantity
         product=1
         for score,value in ingredient_scores.items():
-            if not score == 'calories':
+            if score == 'calories':
+                if value != 500:
+                    value=0
+                else:
+                    value=1
+            else:
                 if value<0:
                     value = 0
-                product*=value
+            product*=value
         return product
 
     def test_score_of_100tsps_butterscotch(self):
@@ -103,5 +108,5 @@ class test_recipe_optimiser(unittest.TestCase):
                     localScore = self.recipeScorer([(self.testData[0],x),(self.testData[1],y),(self.testData[2],z),(self.testData[3],a)])
                     if localScore>score:
                         score=localScore
-        
+
         self.assertEqual(score,222870)
