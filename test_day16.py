@@ -38,6 +38,22 @@ class Sue(object):
                     return False
         return True
 
+class SuePart2(Sue):
+    def compare(self,otherSue):
+        returnValue=True
+        for attribute,value in self.properties.items():
+            if attribute == "cats" or attribute=="trees":
+                if otherSue.getAttribute(attribute) is not None:
+                    if not value < otherSue.getAttribute(attribute):
+                        return False
+            elif attribute=="pomeranians" or attribute=="goldfish":
+                if otherSue.getAttribute(attribute) is not None:
+                    if not value > otherSue.getAttribute(attribute):
+                        return False
+            elif otherSue.getAttribute(attribute) != value:
+                if otherSue.getAttribute(attribute) is not None:
+                    return False
+        return True
 
 class test_day16(unittest.TestCase):
 
@@ -54,6 +70,18 @@ class test_day16(unittest.TestCase):
                            trees=3,
                            cars=2,
                            perfumes=1)
+
+        self.realSue2 = SuePart2(children=3,
+                           cats=7,
+                           samoyeds=2,
+                           pomeranians=3,
+                           akitas=0,
+                           vizslas=0,
+                           goldfish=5,
+                           trees=3,
+                           cars=2,
+                           perfumes=1)
+
 
     def getAttribute(self,sue,name):
         return sue.getAttribute(name)
@@ -112,3 +140,37 @@ class test_day16(unittest.TestCase):
 
         self.assertEqual(len(matching),1)
         self.assertEqual(matching[0].getAttribute('index'),40)
+
+    def test_not_matching_now_cats_is_greater_than(self):
+        self.assertEqual(False,self.realSue2.compare(Sue(cats=7)))
+
+    def test_matching_now_cats_is_greater_than(self):
+        self.assertEqual(True,self.realSue2.compare(Sue(cats=8)))
+
+    def test_not_matching_now_trees_is_greater_than(self):
+        self.assertEqual(False,self.realSue2.compare(Sue(trees=3)))
+
+    def test_matching_now_trees_is_greater_than(self):
+        self.assertEqual(True,self.realSue2.compare(Sue(trees=4)))
+
+    def test_not_matching_now_pomeranians_are_fewer(self):
+        self.assertEqual(False,self.realSue2.compare(Sue(pomeranians=3)))
+
+    def test_now_matching_now_pomeranians_are_fewer(self):
+        self.assertEqual(True,self.realSue2.compare(Sue(pomeranians=2)))
+
+    def test_not_matching_now_goldfish_are_fewer(self):
+        self.assertEqual(False,self.realSue2.compare(Sue(goldfish=5)))
+
+    def test_now_matching_now_goldfish_are_fewer(self):
+        self.assertEqual(True,self.realSue2.compare(Sue(goldfish=4)))
+
+    def test_part2(self):
+        matching=[]
+        for test in self.testData:
+            fakeSue=Sue(test)
+            if self.realSue2.compare(fakeSue):
+                matching.append(fakeSue)
+
+        self.assertEqual(len(matching),1)
+        self.assertEqual(matching[0].getAttribute('index'),241)
