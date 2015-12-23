@@ -12,34 +12,31 @@ class Elf(object):
 
 class houseDeliveryManager(object):
     def __init__(self):
-        self.elves={1:Elf(1)}
+        self.elves=[Elf(1)]
         self.house=0
 
     def addExtraElves(self,newMaximum):
-        #elfNumbers= [elf.number for elf in self.elves]
-        for elfNumber in range(len(self.elves),newMaximum+1):
-            if elfNumber not in self.elves.keys():
-                self.elves[elfNumber]=Elf(elfNumber)
+        for elfNumber in xrange(len(self.elves)+1,newMaximum+1):
+            self.elves.append(Elf(elfNumber))
 
     def deliver(self,house):
-        if house>len(self.elves):
-            self.addExtraElves(house)
-        presents=0
-        for elf in self.elves.values():
-            if elf.deliversToHouse(house):
-                presents += 10 * elf.number
-        return presents
+        return sum([e.number*10 for e in self.elves if e.deliversToHouse(house)])
 
     def deliverToNextHouse(self):
         self.house+=1
         return self.deliver(self.house)
 
-    def solve(self,puzzleInput):
+    def solve(self,puzzleInput,scalingFactor=1):
+        maxHouses=int(puzzleInput*scalingFactor)
+        print "Started allocating",
+        print maxHouses,
+        print " elves"
+        if maxHouses>len(self.elves):
+            self.addExtraElves(maxHouses)
+        print "done"
         presents=0
-        while presents<puzzleInput:
+        while presents<puzzleInput and self.house!=maxHouses:
             presents=self.deliverToNextHouse()
-            if self.house==puzzleInput:
-                return self.house
         return self.house
 
 class test_day20(unittest.TestCase):
@@ -54,27 +51,27 @@ class test_day20(unittest.TestCase):
         return hdm.deliver(number)
 
     def test_elfOneDeliversToFirstHouse(self):
-        elf = {1:Elf(1)}
+        elf = [Elf(1)]
         self.assertEqual(10,self.houseDeliverer(1,elf))
 
     def test_elfTwoDeliversToHouse4(self):
-        elf={2:Elf(2)}
-        self.assertEqual(10+20+40,self.houseDeliverer(4,elf))
+        elf=[Elf(2)]
+        self.assertEqual(20,self.houseDeliverer(4,elf))
 
     def test_elfOneDeliversToHouse3(self):
-        elf={1:Elf(1)}
+        elf=[Elf(1),Elf(2),Elf(3)]
         self.assertEqual(40,self.houseDeliverer(3,elf))
 
     def test_OneElfDeliversToHouse1(self):
-        elf={1:Elf(1)}
+        elf=[Elf(1)]
         self.assertEqual(10,self.houseDeliverer(1,elf))
 
     def test_ElfTwoDoesntDeliverToHouse1(self):
-        elf={2:Elf(2)}
+        elf=[Elf(2)]
         self.assertEqual(0,self.houseDeliverer(1,elf))
 
     def test_firstTwoElvesDeliverToHouse2(self):
-        elves={1:Elf(1),2:Elf(2)}
+        elves=[Elf(1),Elf(2)]
         self.assertEqual(30,self.houseDeliverer(2,elves))
 
     def hdmDoesNotMakeAZeroElf(self):
@@ -85,12 +82,13 @@ class test_day20(unittest.TestCase):
 
     def test_houseDeliverManagerReturns30OnHouse2(self):
         hdm=houseDeliveryManager()
-        self.assertEqual(30,hdm.deliver(2))
+        self.assertEqual(2,hdm.solve(30))
 
     def test_hdmHouse8Returns150(self):
-        self.assertEqual(150,self.hdm.deliver(8))
+        self.assertEqual(8,self.hdm.solve(150))
 
     def test_successiveDelivers(self):
+        self.hdm.elves = [Elf(1),Elf(2)]
         self.assertEqual(10,self.hdm.deliverToNextHouse())
         self.assertEqual(30,self.hdm.deliverToNextHouse())
         self.assertEqual(2,self.hdm.house)
@@ -101,7 +99,7 @@ class test_day20(unittest.TestCase):
     def test_hdm_returns_8_with_input_of_150(self):
         self.assertEqual(self.hdm.solve(150),8)
 
-    def hdm_part1(self):
-        print self.hdm.solve(self.puzzleInput)
+    def test_hdm_part1(self):
+        print self.hdm.solve(self.puzzleInput,0.005)
 
 
