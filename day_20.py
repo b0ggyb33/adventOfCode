@@ -100,6 +100,7 @@ class test_day20(unittest.TestCase):
         self.assertEqual(self.hdm.solve(150),8)
 
     def test_hdm_part1(self):
+        self.hdm.house = 129000
         print self.hdm.solve(self.puzzleInput,0.005)
 
 
